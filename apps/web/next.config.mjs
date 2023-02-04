@@ -9,5 +9,9 @@
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: ["images.unsplash.com", "i.pravatar.cc"],
+  },
 };
 export default config;

@@ -1,44 +1,67 @@
 import { NextPage } from "next";
-import Head from "next/head";
+import { PropsWithChildren } from "react";
+import { FaCircleNotch } from "react-icons/fa";
+import { BarGraph } from "~/components/BarGraph";
+import { DoughnutGraph } from "~/components/DougnutGraph";
+import { HistoryLineGraph } from "~/components/HistoryLineGraph";
+import { Layout } from "~/components/Layout";
+import { LineGraph } from "~/components/LineGraph";
+import { Progress } from "~/components/Progress";
+import { RadarGraph } from "~/components/RadarGraph";
+import { Top } from "~/components/Top";
 import { api } from "~/utils/api";
-import { Emotion } from "~/utils/types";
 
-const Playground: NextPage = () => {
-  const emotions = api.emotion.get.useQuery();
+const Playground: NextPage<PropsWithChildren> = ({ children }) => {
+  const emotions = api.emotion.get.useQuery(undefined, {
+    refetchInterval: 2000,
+  });
+
+  if (emotions.isLoading)
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <FaCircleNotch className="animate-spin" />
+      </div>
+    );
+
+  if (emotions.isError)
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <h1 className="text-xl font-extrabold tracking-tight text-white ">
+          Error
+        </h1>
+      </div>
+    );
+
   return (
-    <>
-      <Head>
-        <title>Empathy Playground</title>
-        <meta name="description" content="The Empathy Playground" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            See your <span className="text-[hsl(280,100%,70%)]">Emotions!</span>
-          </h1>
-          <progress className="progress w-56 progress-primary"></progress>
-          <progress className="progress w-56 progress-primary"></progress>
-          <progress className="progress w-56 progress-primary"></progress>
-          <progress className="progress w-56 progress-primary"></progress>
-          <progress className="progress w-56 progress-primary"></progress>
-          <progress className="progress w-56 progress-primary"></progress>
-          <progress className="progress w-56 progress-primary"></progress>
-        </div>
-        <p>
-          {emotions.data?.faces.map((face, index) => (
-            <div key={index}>
-              {face.map((emotion, index) => (
-                <div key={index}>
-                  <p>{Emotion[index]}</p>
-                  <p>{emotion}</p>
-                </div>
-              ))}
+    <Layout>
+      <div className="flex flex-col items-center w-full justify-center gap-12">
+        <div className="w-full space-y-8 flex flex-col">
+          <div className="flex flex-wrap space-x-8">
+            <div className="flex-1 basis-3/5">
+              <Progress emotions={emotions.data} />
             </div>
-          ))}
-        </p>
-      </main>
-    </>
+            <div className="flex-1 basis-1/5">
+              <Top emotions={emotions.data} />
+            </div>
+          </div>
+          <div className="flex flex-wrap space-x-8 items-center">
+            <div className="flex-1">
+              <DoughnutGraph emotions={emotions.data} />
+            </div>
+            <div className="flex-1 flex flex-col space-y-8">
+              <BarGraph emotions={emotions.data} />
+              <LineGraph emotions={emotions.data} />
+            </div>
+            <div className="flex-1">
+              <RadarGraph emotions={emotions.data} />
+            </div>
+          </div>
+          <div className="flex flex-wrap space-x-8">
+            <HistoryLineGraph emotions={emotions.data} />
+          </div>
+        </div>
+      </div>
+    </Layout>
   );
 };
 
