@@ -76,3 +76,11 @@ yarn-error.log*
 .vercel
 
 .vscode
+
+# python
+**/*/*.pyc
+**/*/__pycache__/
+**/*/.pytest_cache/
+**/*/.mypy_cache/
+**/*/bin
+**/*/lib
