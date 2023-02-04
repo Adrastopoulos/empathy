@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "strict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "noErrorTruncation": true,
+
+    // Language Compilation
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "resolveJsonModule": true,
+    "allowJs": true,
+
+    // Emit
+    "importHelpers": true,
+    "importsNotUsedAsValues": "remove",
+    "newLine": "lf",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+
+    // Completeness
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "paths": {
+      "@empathy/*": ["./packages/*", "./apps/*"]
+    }
+  }
+}
